@@ -1,6 +1,7 @@
 import logging
 from typing import List, Dict, Optional
 from urllib.parse import urlparse
+from langfuse import observe
 from tavily import TavilyClient
 from config.settings import settings
 
@@ -13,7 +14,7 @@ class SearchTool:
         if not settings.tavily_api_key or settings.tavily_api_key.startswith("test_"):
             logger.warning("Using a test or missing Tavily API key! Search may fail.")
         self.client = TavilyClient(api_key=settings.tavily_api_key)
-        
+    @observe()    
     def find_product_urls(self, product_name: str, max_results: int = 3) -> List[Dict[str, str]]:
         """
         Searches for product pages and returns a list of URLs and their competitors.

@@ -1,6 +1,7 @@
 import logging
 from typing import Optional
 from firecrawl import FirecrawlApp
+from langfuse import observe
 from config.settings import settings
 
 logger = logging.getLogger(__name__)
@@ -13,7 +14,7 @@ class Scraper:
             api_key=settings.firecrawl_api_key,
             api_url=settings.firecrawl_api_url
         )
-        
+    @observe()    
     def fetch_page_content(self, url: str) -> Optional[str]:
         """
         Scrapes a URL and returns its content as Markdown.
