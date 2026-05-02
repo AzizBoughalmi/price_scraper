@@ -40,3 +40,30 @@ During the initial setup, we made several key architectural decisions for the MV
 
 ## Current State
 The project currently has a fully functional, headless (CLI) autonomous AI agent capable of searching the web for a given product and extracting its pricing from competitor sites into a structured JSON format. All code is tracked under version control and passing unit tests.
+
+## Usage & Commands
+Here are the commands to run various components of the project:
+
+### Run the Agent (Autonomous Mode)
+Searches the web dynamically for the given product and extracts pricing.
+```bash
+.venv\Scripts\python main.py --product "Apple iPhone 15" --max-results 2
+```
+
+### Run the Agent (Targeted URLs)
+Extracts pricing from specific hardcoded URLs.
+```bash
+.venv\Scripts\python main.py --product "Sony WH-1000XM5" --urls "Sony:https://electronics.sony.com/audio/headphones/headband/p/wh1000xm5-b"
+```
+
+### Run the Search Sandbox
+Test the Tavily search standalone.
+```bash
+.venv\Scripts\python sandbox_search.py
+```
+
+### Run All Unit Tests
+Executes the full pytest suite.
+```bash
+.venv\Scripts\pytest tests/ -v
+```
