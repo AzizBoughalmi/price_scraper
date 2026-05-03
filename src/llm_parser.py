@@ -2,7 +2,7 @@ import json
 import logging
 from typing import Optional
 import google.generativeai as genai
-from langfuse import observe
+from langfuse import observe , Langfuse
 from config.settings import settings
 from src.models import PriceResult
 
@@ -15,7 +15,7 @@ class LLMParser:
         genai.configure(api_key=settings.gemini_api_key)
         # Using gemini-2.5-flash since gemini-4o-mini is an OpenAI model name. You requested "gemini".
         self.model = genai.GenerativeModel('gemini-2.5-flash')
-    @observe()    
+    @observe(as_type="generation")    
     def extract_price_data(self, markdown_content: str, product_name: str, competitor: str, url: str) -> Optional[PriceResult]:
         """
         Extracts price data from markdown content.
@@ -58,7 +58,8 @@ class LLMParser:
                 response_text = response_text[:-3]
                 
             parsed_data = json.loads(response_text.strip())
-            
+
+            Langfuse().update_current_generation(model=self.model.model_name, input=prompt, output=response_text)
             # Return structured result
             return PriceResult(
                 competitor=competitor,

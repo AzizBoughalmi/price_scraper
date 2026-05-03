@@ -1,5 +1,7 @@
 import logging
 from typing import List
+
+from langfuse import observe
 from src.scraper import Scraper
 from src.llm_parser import LLMParser
 from src.search import SearchTool
@@ -15,6 +17,7 @@ class Agent:
         self.parser = LLMParser()
         self.searcher = SearchTool()
         
+    @observe()
     def process_url(self, url: str, product_name: str, competitor: str) -> PriceResult | None:
         """Process a single URL: Scrape -> Parse."""
         logger.info(f"Processing {competitor} for {product_name} at {url}")
@@ -38,7 +41,7 @@ class Agent:
             return None
             
         return result
-        
+    @observe()    
     def run_multi_url_search(self, product_name: str, urls: List[dict]) -> List[PriceResult]:
         """
         Processes a list of URLs and returns parsed results.
@@ -53,7 +56,7 @@ class Agent:
                 results.append(res)
                 
         return results
-
+    @observe()
     def run_autonomous_search(self, product_name: str, max_results: int = 3) -> List[PriceResult]:
         """
         Fully autonomous flow: Searches for the product, then parses pricing from each link.
